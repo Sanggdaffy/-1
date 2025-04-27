@@ -1,0 +1,68 @@
+Завдання 1
+// 1
+let user = {};
+
+// 2
+user.name = "Марк";
+
+// 3
+user.surname = "Сміт";
+
+// 4
+user.name = "Тарас";
+
+// 5
+delete user.name;
+
+Завдання 2
+
+function isEmpty(obj) {
+    for (let key in obj) {
+        return false;
+    }
+    return true;
+}
+
+// Приклад використання:
+let user = {};
+console.log(isEmpty(user)); // true
+
+user.name = "Тарас";
+console.log(isEmpty(user)); // false
+
+Завдання 3
+
+let salaries = {
+    Jarik: 1000,
+    Anna: 1600,
+    Miko: 1300
+};
+
+let sum = 0;
+for (let key in salaries) {
+    sum += salaries[key];
+}
+
+console.log(sum); // 3900
+
+Завдання 4
+
+function multiplyNumeric(obj) {
+    for (let key in obj) {
+        if (typeof obj[key] === 'number') {
+            obj[key] *= 2;
+        }
+    }
+}
+
+// Приклад використання:
+let menu = {
+    width: 200,
+    height: 300,
+    title: "My menu"
+};
+
+multiplyNumeric(menu);
+
+console.log(menu);
+// { width: 400, height: 600, title: "My menu" }
