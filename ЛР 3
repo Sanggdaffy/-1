@@ -1,0 +1,44 @@
+Завдання 1
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+console.log(random(1, 5)); // випадкове число між 1 і 5 (5 не включено)
+
+Завдання 2 
+
+function isPrime(num) {
+    if (num <= 1) return false;
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+console.log(isPrime(7));  // true
+console.log(isPrime(10)); // false
+
+Завдання 3
+
+function sumToN(n) {
+    let sum = 0;
+    if (n > 0) {
+        for (let i = 1; i <= n; i++) {
+            sum += i;
+        }
+    } else {
+        for (let i = 1; i >= n; i--) {
+            sum += i;
+        }
+    }
+    return sum;
+}
+
+
+console.log(sumToN(5));  // 15 (1+2+3+4+5)
+console.log(sumToN(-3)); // -5 (1+0+(-1)+(-2)+(-3))
+
+
