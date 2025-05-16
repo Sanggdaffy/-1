@@ -1,0 +1,60 @@
+Завдання 1
+
+let styles = ["Jazz", "Blues"];
+styles.push("Rock-n-Roll");
+
+let middleIndex = Math.floor(styles.length / 2);
+styles[middleIndex] = "Classics";
+
+console.log(styles.shift());
+
+styles.unshift("Rap", "Reggae");
+
+console.log(styles); // ["Rap", "Reggae", "Classics", "Rock-n-Roll"]
+
+Завдання 2
+
+function sumInput() {
+  let numbers = [];
+
+  while (true) {
+    let input = prompt("Введіть число:", "");
+
+    if (input === null || input.trim() === "" || !isFinite(input)) break;
+
+    numbers.push(+input);
+  }
+
+  let sum = 0;
+  for (let num of numbers) {
+    sum += num;
+  }
+
+  return sum;
+}
+
+console.log(sumInput());
+
+Завдання 3
+
+function getMaxSubSum(arr) {
+  let maxSum = 0;
+  let partialSum = 0;
+
+  for (let item of arr) {
+    partialSum += item;
+    if (partialSum > maxSum) maxSum = partialSum;
+    if (partialSum < 0) partialSum = 0;
+  }
+
+  return maxSum;
+}
+
+console.log(getMaxSubSum([-1, 2, 3, -9]));         // 5
+console.log(getMaxSubSum([2, -1, 2, 3, -9]));      // 6
+console.log(getMaxSubSum([-1, 2, 3, -9, 11]));     // 11
+console.log(getMaxSubSum([-2, -1, 1, 2]));         // 3
+console.log(getMaxSubSum([100, -9, 2, -3, 5]));    // 100
+console.log(getMaxSubSum([1, 2, 3]));              // 6
+console.log(getMaxSubSum([-1, -2, -3]));           // 0
+
