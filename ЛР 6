@@ -1,0 +1,59 @@
+Завдання 1
+
+function unique(arr) {
+  return Array.from(new Set(arr));
+}
+
+let values = ["Hare", "Krishna", "Hare", "Krishna",
+  "Krishna", "Krishna", "Hare", "Hare", ":-O"
+];
+
+alert(unique(values)); // Hare, Krishna, :-O
+
+Завдання 2
+
+function aclean(arr) {
+  const map = new Map();
+
+  for (let word of arr) {
+    let sorted = word.toLowerCase().split('').sort().join('');
+    map.set(sorted, word);
+  }
+
+  return Array.from(map.values());
+}
+
+let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
+alert(aclean(arr)); // наприклад: "nap,teachers,ear"
+
+Завдання 3
+
+function countOccurrences(arr) {
+  const map = new Map();
+
+  for (let num of arr) {
+    map.set(num, (map.get(num) || 0) + 1);
+  }
+
+  return map;
+}
+
+// Приклад:
+let numbers = [1, 2, 2, 3, 3, 3, 4];
+console.log(countOccurrences(numbers));
+// Map { 1 => 1, 2 => 2, 3 => 3, 4 => 1 }
+
+
+Завдання 4
+
+function areAllUnique(arr) {
+  return new Set(arr).size === arr.length;
+}
+
+const uniqueArray = [1, 2, 3, 4, 5];
+const hasDuplicates = areAllUnique(uniqueArray);
+console.log(hasDuplicates); // true
+
+const arrayWithDuplicates = [1, 2, 3, 2, 4, 5];
+const hasDuplicates2 = areAllUnique(arrayWithDuplicates);
+console.log(hasDuplicates2); // false
