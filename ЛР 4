@@ -1,0 +1,32 @@
+Завдання 1
+
+function ucFirst(str) {
+  if (!str) return "";
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+Завдання 2
+
+function checkSpam(str) {
+  let lowerStr = str.toLowerCase();
+  return lowerStr.includes("росі") || lowerStr.includes("xxx");
+}
+
+Завдання 3
+
+function truncate(str, maxlength) {
+  if (str.length > maxlength) {
+    return str.slice(0, maxlength - 3) + "...";
+  }
+  return str;
+}
+
+Завдання 4
+
+function strikeStr(str) {
+  let words = str.split(" ");
+  if (words.length > 3) {
+    return words.join("\n");
+  }
+  return str;
+}
