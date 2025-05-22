@@ -1,0 +1,155 @@
+Завдання 1
+
+const form = document.querySelector(".grocery-form");
+const grocery = document.getElementById("grocery");
+const submitBtn = document.querySelector(".submit-btn");
+const container = document.querySelector(".grocery-container");
+const list = document.querySelector(".grocery-list");
+const clearBtn = document.querySelector(".clear-btn");
+const alert = document.querySelector(".alert");
+
+let editElement;
+let editFlag = false;
+let editID = "";
+
+// Показ повідомлення
+function showAlert(text, action) {
+  alert.textContent = text;
+  alert.className = `alert alert-${action}`;
+  setTimeout(() => {
+    alert.textContent = "";
+    alert.className = "alert";
+  }, 2000);
+}
+
+// Очистити форму
+function setBackToDefault() {
+  grocery.value = "";
+  editFlag = false;
+  editID = "";
+  submitBtn.textContent = "Додати";
+}
+
+// Додати елемент
+function addItem(e) {
+  e.preventDefault();
+  const value = grocery.value;
+  const id = new Date().getTime().toString();
+
+  if (value && !editFlag) {
+    createListItem(id, value);
+    showAlert("Додано продукт", "success");
+    container.classList.add("show-container");
+    addToLocalStorage(id, value);
+    setBackToDefault();
+  } else if (value && editFlag) {
+    editElement.innerHTML = value;
+    showAlert("Редагування успішне", "success");
+    editLocalStorage(editID, value);
+    setBackToDefault();
+  } else {
+    showAlert("Введіть значення", "danger");
+  }
+}
+
+// Створити HTML елемент
+function createListItem(id, value) {
+  const element = document.createElement("article");
+  element.classList.add("grocery-item");
+  element.setAttribute("data-id", id);
+  element.innerHTML = `
+    <p class="title">${value}</p>
+    <div class="btn-container">
+      <button type="button" class="edit-btn"><i class="fas fa-edit"></i></button>
+      <button type="button" class="delete-btn"><i class="fas fa-trash"></i></button>
+    </div>
+  `;
+
+  const deleteBtn = element.querySelector(".delete-btn");
+  const editBtn = element.querySelector(".edit-btn");
+
+  deleteBtn.addEventListener("click", deleteItem);
+  editBtn.addEventListener("click", editItem);
+
+  list.appendChild(element);
+}
+
+// Видалити елемент
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
+
+  list.removeChild(element);
+  if (list.children.length === 0) {
+    container.classList.remove("show-container");
+  }
+  showAlert("Продукт видалено", "danger");
+  removeFromLocalStorage(id);
+  setBackToDefault();
+}
+
+// Редагувати елемент
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  editElement = element.querySelector(".title");
+  grocery.value = editElement.innerHTML;
+  editFlag = true;
+  editID = element.dataset.id;
+  submitBtn.textContent = "Редагувати";
+}
+
+// Очистити список
+function clearItems() {
+  const items = document.querySelectorAll(".grocery-item");
+  if (items.length > 0) {
+    items.forEach(item => list.removeChild(item));
+  }
+  container.classList.remove("show-container");
+  showAlert("Список очищено", "danger");
+  localStorage.removeItem("list");
+  setBackToDefault();
+}
+
+// ============== Local Storage =======================
+function addToLocalStorage(id, value) {
+  const grocery = { id, value };
+  let items = getLocalStorage();
+  items.push(grocery);
+  localStorage.setItem("list", JSON.stringify(items));
+}
+
+function removeFromLocalStorage(id) {
+  let items = getLocalStorage();
+  items = items.filter(item => item.id !== id);
+  localStorage.setItem("list", JSON.stringify(items));
+}
+
+function editLocalStorage(id, value) {
+  let items = getLocalStorage();
+  items = items.map(item => {
+    if (item.id === id) {
+      item.value = value;
+    }
+    return item;
+  });
+  localStorage.setItem("list", JSON.stringify(items));
+}
+
+function getLocalStorage() {
+  return localStorage.getItem("list")
+    ? JSON.parse(localStorage.getItem("list"))
+    : [];
+}
+
+// Завантажити при відкритті
+window.addEventListener("DOMContentLoaded", () => {
+  const items = getLocalStorage();
+  if (items.length > 0) {
+    items.forEach(item => createListItem(item.id, item.value));
+    container.classList.add("show-container");
+  }
+});
+
+// Події
+form.addEventListener("submit", addItem);
+clearBtn.addEventListener("click", clearItems);
