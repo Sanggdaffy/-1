@@ -1,0 +1,228 @@
+LOGIN WINDOW
+
+
+package numizmat;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class LoginWindow extends Application {
+    @Override
+    public void start(Stage stage) {
+        TextField loginField = new TextField();
+        PasswordField passField = new PasswordField();
+        Button loginBtn = new Button("Увійти");
+
+        Label message = new Label();
+        loginBtn.setOnAction(e -> {
+            String login = loginField.getText();
+            String pass = passField.getText();
+            if (UserService.check(login, pass)) {
+                message.setText("Успішний вхід!");
+                MonetaCatalog.display();
+                stage.close();
+            } else {
+                message.setText("Невірні дані");
+            }
+        });
+
+        VBox root = new VBox(new Label("Логін:"), loginField, new Label("Пароль:"), passField, loginBtn, message);
+        stage.setScene(new Scene(root, 250, 200));
+        stage.setTitle("Авторизація");
+        stage.show();
+    }
+}
+
+Main APP
+
+
+package numizmat;
+
+import javafx.application.Application;
+
+public class MainApp {
+    public static void main(String[] args) {
+        Application.launch(LoginWindow.class);
+    }
+}
+
+Moneta Catalog
+
+package numizmat;
+
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class MonetaCatalog {
+
+    public static void display() {
+        Stage stage = new Stage();
+        ListView<String> list = new ListView<>();
+        TextField field = new TextField();
+
+        Button addBtn = new Button("Додати");
+        Button editBtn = new Button("Редагувати");
+        Button deleteBtn = new Button("Видалити");
+        Button statsBtn = new Button("Статистика"); // ➕ кнопка Статистика
+
+        // Додавання монети
+        addBtn.setOnAction(e -> {
+            String coin = field.getText().trim();
+            if (!coin.isEmpty()) {
+                list.getItems().add(coin);
+                field.clear();
+            }
+        });
+
+        // Редагування монети
+        editBtn.setOnAction(e -> {
+            int index = list.getSelectionModel().getSelectedIndex();
+            if (index >= 0) {
+                String newValue = field.getText().trim();
+                if (!newValue.isEmpty()) {
+                    list.getItems().set(index, newValue);
+                    field.clear();
+                }
+            }
+        });
+
+        // Видалення монети
+        deleteBtn.setOnAction(e -> {
+            int index = list.getSelectionModel().getSelectedIndex();
+            if (index >= 0) {
+                list.getItems().remove(index);
+            }
+        });
+
+        // ➕ Статистика
+        statsBtn.setOnAction(e -> {
+            int total = list.getItems().size();
+            long rareCount = list.getItems().stream()
+                    .filter(item -> item.toLowerCase().contains("рідкісна"))
+                    .count();
+
+            double percent = total > 0 ? (rareCount * 100.0 / total) : 0;
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Статистика");
+            alert.setHeaderText("Інформація про колекцію");
+            alert.setContentText(
+                    "Загальна кількість монет: " + total +
+                    "\nКількість рідкісних монет: " + rareCount +
+                    "\nВідсоток рідкісних монет: " + String.format("%.2f", percent) + "%"
+            );
+            alert.showAndWait();
+        });
+
+        // Додаємо кнопку Статистика до кнопок
+        HBox buttons = new HBox(10, addBtn, editBtn, deleteBtn, statsBtn);
+
+        VBox root = new VBox(10, new Label("Каталог монет:"), list, field, buttons);
+        stage.setScene(new Scene(root, 450, 480));
+        stage.setTitle("Каталог монет");
+        stage.show();
+    }
+}
+
+USER SERVICE
+
+
+package numizmat;
+
+public class UserService {
+    public static boolean check(String login, String pass) {
+        return login.equals("user") && pass.equals("1234");
+    }
+}
+
+CLASSES LOGIN WINDOW
+
+// Source code is decompiled from a .class file using FernFlower decompiler.
+package numizmat;
+
+import javafx.application.Application;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class LoginWindow extends Application {
+   public LoginWindow() {
+   }
+
+   public void start(Stage stage) {
+      TextField loginField = new TextField();
+      PasswordField passField = new PasswordField();
+      Button loginBtn = new Button("Увійти");
+      Label message = new Label();
+      loginBtn.setOnAction((e) -> {
+         String login = loginField.getText();
+         String pass = passField.getText();
+         if (UserService.check(login, pass)) {
+            message.setText("Успішний вхід!");
+            MonetaCatalog.display();
+            stage.close();
+         } else {
+            message.setText("Невірні дані");
+         }
+
+      });
+      VBox root = new VBox(new Node[]{new Label("Логін:"), loginField, new Label("Пароль:"), passField, loginBtn, message});
+      stage.setScene(new Scene(root, 250.0, 200.0));
+      stage.setTitle("Авторизація");
+      stage.show();
+   }
+}
+
+XML
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>numizmat-guide</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <exec.mainClass>numizmat.MainApp</exec.mainClass>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>${exec.mainClass}</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
